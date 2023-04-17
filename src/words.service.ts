@@ -31,15 +31,18 @@ export class WordService {
   }
 
   solving(query: SolvingQueryModel): string[] {
-    let restricedCharacteresWithComa = query.restrictedCharacters.includes("e") ? query.restrictedCharacters + ",é" : query.restrictedCharacters;
+    let restricedCharacteresWithAccent = query.restrictedCharacters.includes("e") ? query.restrictedCharacters + ",é" : query.restrictedCharacters;
 
     let wordToRegex: string =
-      query.word.split("e").join("[eé]");
+      query.word.split("e").join("[eéêè]")
+        .split("a").join("[aàâ]")
+        .split("u").join("[uùû]")
+    ;
 
     let queryToRegex: string =
       wordToRegex.split(
         "-").join(
-        `[^${restricedCharacteresWithComa.split(",").join("")}]`
+        `[^${restricedCharacteresWithAccent.split(",").join("")}]`
       );
 
     console.log(queryToRegex);
